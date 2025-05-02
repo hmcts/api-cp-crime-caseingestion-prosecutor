@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 
 public class OpenAPIConfigurationLoader {
 
-    private static String JUDGES_OPENAPI_YML = "openapi/TODO_ADD_FILENAME.openapi.yml";
+    private static String JUDGES_OPENAPI_YML = "openapi/prosecutor.openapi.yml";
 
     public OpenAPI openAPI() {
         return loadOpenApiFromClasspath(JUDGES_OPENAPI_YML);

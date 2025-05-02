@@ -1,63 +1,10 @@
-# API-CP Template Repository
+# API CP Crime Case Ingestion Prosecutor
 
-This is a template repository for Common Platform (CP) APIs in HMCTS. It defines naming conventions, structure, and validation tooling for OpenAPI specifications.
+This API provides information used by the Common Platform Prosecutor Interface (CPPI).
 
-> 🔗 API definitions should follow the [HMCTS RESTful API Standards](https://hmcts.github.io/restful-api-standards/).  
-> 📘 See [APIVERSIONING.md](./docs/API-VERSIONING-STRATEGY.md) for our CP API versioning strategy based on media types and SemVer.
+## Documentation
 
-## Naming Convention
-
-> NOTE: Avoid using terms like `common, core, base, utils, helpers, misc, or shared`.
-> These names often allow for ambiguous ownership and quickly become black holes where cohesion goes to die.
-
-Repository names follow a pattern from generic to specific:
-
-```
-api-cp-[case-type]-{product-domain}-{name-of-entity}
-```
-The optional `case-type` parameter could be:
-
-* civil 
-* crime 
-* family 
-* tribunal
-
-HMCTS manages all Civil, Criminal, Family (separate from civil), and Tribunal cases.
-
-### Reference Data Repositories
-
-Reference data APIs use the following naming format:
-
-```
-api-cp-refdata-{product-domain}-{name-of-entity}
-```
-Some might argue that `product-domain` should be optional for reference data, placing it under global ownership. But global ownership often means no ownership — and no accountability. Therefore, `product-domain` is **required**.
-
-## Post-Template Manual Steps
-
-### Setup
-
-* Go to settings of the repository -> General -> check "Automatically delete head branches"
-* Import the ruleset `.github/rulesets/master.json`  
-  To import the ruleset, follow GitHub’s instructions here:  
-  👉 [Importing a ruleset](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/managing-rulesets-for-a-repository#importing-a-ruleset)
-  
-Once the ruleset has been successfully imported via GitHub Settings, the new repository no longer requires `.github/rulesets/master.json` so it **should be deleted**:
-
-### Clean Up
-
-After using this template to create your repository, the following files are no longer needed and **should be deleted**:
-
-- `./docs/*`
-- `./src/main/resources/openapi/deleteme`
-
-Update the `./README.md` to reflect the context of the new created repository
-
-## Supporting Documents
-
-Further documentation can be found in the [docs](./docs) directory.
-
-> **Note** the build requires secrets and variables to be available in project settings see [GitHub Actions: Required Secrets and Variables](./docs/GITHUB-ACTIONS.md)
+Further documentation see the [API Template repository readme](https://github.com/hmcts/api-cp-template?tab=readme-ov-file#api-cp-template-repository).
 
 ## License
 
