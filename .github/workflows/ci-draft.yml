@@ -141,11 +141,7 @@ jobs:
         run: |
           VERSION=${{ needs.Artefact-Version.outputs.draft_version }}
 
-          gradle build \
-            -DAPI_SPEC_VERSION=$VERSION \
-            -DGITHUB_REPOSITORY=${{ github.repository }} \
-            -DGITHUB_ACTOR=${{ github.actor }} \
-            -DGITHUB_TOKEN=$GITHUB_TOKEN
+          gradle build -DAPI_SPEC_VERSION=$VERSION
 
           if [ "${{ github.event_name }}" == "push" ]; then
             echo "Push event trigger - Publishing artefact"
