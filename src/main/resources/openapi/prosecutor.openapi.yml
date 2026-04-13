@@ -210,6 +210,173 @@ components:
       required:
         - courtHouse
         - courtSessions
+    enforcementResultPrompt:
+      type: object
+      description: A free-form key/value prompt captured alongside a result (e.g. fine amount, collection order terms).
+      properties:
+        id:
+          $ref: '#/components/schemas/uuid'
+        label:
+          description: The prompt label as shown to the court user
+          type: string
+        value:
+          description: The prompt value captured against the label
+          type: string
+      required:
+        - id
+        - label
+        - value
+      additionalProperties: false
+    enforcementResultEntry:
+      type: object
+      description: A single result imposed at defendant, case or offence level.
+      x-class-extra-annotation: "@lombok.AllArgsConstructor"
+      properties:
+        label:
+          description: The human-readable result label (e.g. 'Fine', 'Conditional discharge').
+          type: string
+        court:
+          description: The sentencing court
+          type: string
+        courtRoom:
+          description: The court room in which the result was imposed
+          type: string
+        lastSharedDate:
+          description: ISO-8601 timestamp at which this result was last shared with enforcement subscribers. Populated by CP on egress; omitted on ingress.
+          type: string
+          format: date-time
+        orderedDate:
+          description: The date on which the result was ordered by the court
+          $ref: '#/components/schemas/datePattern'
+        prompts:
+          type: array
+          items:
+            $ref: '#/components/schemas/enforcementResultPrompt'
+      required:
+        - label
+        - court
+        - courtRoom
+        - prompts
+      additionalProperties: false
+    enforcementResultPlea:
+      type: object
+      description: The plea entered by the defendant against an offence.
+      properties:
+        pleaDate:
+          description: Date on which the plea was entered
+          $ref: '#/components/schemas/datePattern'
+        pleaValue:
+          description: The plea value, e.g. GUILTY, NOT_GUILTY.
+          type: string
+      required:
+        - pleaDate
+        - pleaValue
+      additionalProperties: false
+    enforcementResultVerdict:
+      type: object
+      description: The verdict returned against an offence.
+      x-class-extra-annotation: "@lombok.AllArgsConstructor"
+      properties:
+        verdictDate:
+          description: Date on which the verdict was returned
+          $ref: '#/components/schemas/datePattern'
+        verdictCategory:
+          description: The verdict category, e.g. CONVICTED, ACQUITTED.
+          type: string
+        verdictDescription:
+          description: Human-readable description of the verdict
+          type: string
+      required:
+        - verdictDate
+        - verdictCategory
+      additionalProperties: false
+    enforcementResultOffence:
+      type: object
+      description: An offence within a case, together with any offence-level results, plea and verdict.
+      x-class-extra-annotation: "@lombok.AllArgsConstructor"
+      properties:
+        id:
+          $ref: '#/components/schemas/uuid'
+        startDate:
+          description: Offence start date
+          $ref: '#/components/schemas/datePattern'
+        endDate:
+          description: Offence end date
+          $ref: '#/components/schemas/datePattern'
+        offenceWording:
+          description: The full offence wording as charged
+          type: string
+        plea:
+          $ref: '#/components/schemas/enforcementResultPlea'
+        offenceLevelResults:
+          type: array
+          items:
+            $ref: '#/components/schemas/enforcementResultEntry'
+        convictionDate:
+          description: Date of conviction (if the offence resulted in a conviction)
+          $ref: '#/components/schemas/datePattern'
+        verdict:
+          $ref: '#/components/schemas/enforcementResultVerdict'
+      required:
+        - id
+        - startDate
+        - endDate
+        - offenceWording
+        - offenceLevelResults
+        - plea
+      additionalProperties: false
+    enforcementResultCase:
+      type: object
+      description: A prosecution case within the hearing, together with its case-level and offence-level results.
+      properties:
+        id:
+          $ref: '#/components/schemas/uuid'
+        urn:
+          description: The unique reference number for the case
+          type: string
+        caseLevelResults:
+          type: array
+          items:
+            $ref: '#/components/schemas/enforcementResultEntry'
+        offences:
+          type: array
+          items:
+            $ref: '#/components/schemas/enforcementResultOffence'
+      required:
+        - id
+        - urn
+        - caseLevelResults
+        - offences
+      additionalProperties: false
+    enforcementResultDetails:
+      type: object
+      description: >-
+        Case-resulted payload shared between Common Platform and the enforcement system (Libra) for a single hearing / defendant.
+        Describes defendant-level, case-level and offence-level results produced at the conclusion of a hearing, which Common
+        Platform then forwards to subscribed enforcement parties. Modelled on the CP `results.results-details` internal schema.
+      properties:
+        hearingId:
+          description: The identifier of the hearing at which these results were returned
+          $ref: '#/components/schemas/uuid'
+        personId:
+          description: The identifier of the defendant person these results apply to
+          $ref: '#/components/schemas/uuid'
+        defendantLevelResults:
+          description: Results imposed against the defendant as a whole (e.g. costs, surcharge, collection order).
+          type: array
+          items:
+            $ref: '#/components/schemas/enforcementResultEntry'
+        cases:
+          description: The cases heard at this hearing for this defendant, with their case- and offence-level results.
+          type: array
+          items:
+            $ref: '#/components/schemas/enforcementResultCase'
+      required:
+        - hearingId
+        - personId
+        - defendantLevelResults
+        - cases
+      additionalProperties: false
 
 security:
   - BearerAuth: []
@@ -5351,3 +5518,102 @@ paths:
                 startDate: '2021-04-27'
         '400':
           description: Bad Request
+  /enforcementprosecutions/results:
+    post:
+      summary: Share case-resulted information with the enforcement system
+      description: >-
+        Submit the results recorded at a hearing so that Common Platform can forward them to the enforcement system (Libra)
+        and any other subscribed third parties. Supports CCT-1222 "Case resulted" on the Enforcement 2025 E2E flow: a prosecutor
+        (or Libra acting as prosecutor) POSTs the hearing's defendant-, case- and offence-level results; CP acknowledges
+        synchronously and distributes the payload asynchronously to subscribers.
+      tags:
+        - Sharing Case Results With Enforcement
+      requestBody:
+        description: Case-resulted details for a single hearing and defendant.
+        required: true
+        content:
+          application/vnd.hmcts.enforcementprosecutions.results.v1+json:
+            schema:
+              $ref: '#/components/schemas/enforcementResultDetails'
+            example:
+              hearingId: 6b7b9adc-ccee-4b13-b2c7-499c28e98962
+              personId: 0f5a7b3a-2b2c-4b14-9b76-1d8c8ed0a2a1
+              defendantLevelResults:
+                - label: Costs
+                  court: Lavender Hill Magistrates' Court
+                  courtRoom: Court 1
+                  orderedDate: '2026-04-10'
+                  prompts:
+                    - id: a1e4c6b4-7f8d-4d9d-9a65-7b1b6a2f3c51
+                      label: Amount of costs
+                      value: '85'
+                - label: Collection order
+                  court: Lavender Hill Magistrates' Court
+                  courtRoom: Court 1
+                  orderedDate: '2026-04-10'
+                  prompts:
+                    - id: c3e2f7ab-9d14-4c0f-b3fa-1a2b3c4d5e6f
+                      label: Collection order type
+                      value: Make payments as ordered
+              cases:
+                - id: 2f1e9a84-1b23-4c98-8a7b-9c0d1e2f3a4b
+                  urn: TVL72301372
+                  caseLevelResults:
+                    - label: Surcharge
+                      court: Lavender Hill Magistrates' Court
+                      courtRoom: Court 1
+                      orderedDate: '2026-04-10'
+                      prompts:
+                        - id: 4a7b1c2d-3e4f-5061-7283-94a5b6c7d8e9
+                          label: Amount of surcharge
+                          value: '34'
+                  offences:
+                    - id: 9b0a1c2d-3e4f-5061-7283-94a5b6c7d8e9
+                      startDate: '2025-11-01'
+                      endDate: '2025-11-01'
+                      offenceWording: Possess a television set with intent to install / use without a licence
+                      plea:
+                        pleaDate: '2026-02-20'
+                        pleaValue: GUILTY
+                      offenceLevelResults:
+                        - label: Fine
+                          court: Lavender Hill Magistrates' Court
+                          courtRoom: Court 1
+                          orderedDate: '2026-04-10'
+                          prompts:
+                            - id: 6d7e8f90-1a2b-3c4d-5e6f-708192a3b4c5
+                              label: Amount of fine
+                              value: '147'
+                      convictionDate: '2026-04-10'
+                      verdict:
+                        verdictDate: '2026-04-10'
+                        verdictCategory: CONVICTED
+                        verdictDescription: Convicted after guilty plea
+      responses:
+        '202':
+          description: Accepted. CP has accepted the case-resulted payload and will forward it asynchronously to enforcement and other subscribed parties.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusURL:
+                    description: URL at which the caller may poll the submission status
+                    type: string
+                  submissionId:
+                    description: Unique identifier for this case-resulted submission
+                    type: string
+                    format: uuid
+                required:
+                  - statusURL
+                  - submissionId
+                additionalProperties: false
+              example:
+                statusURL: https://www.dummy.gov.uk/enforcementprosecutions/submissions/8191c165-e9e4-4fd7-ac6d-5bfd04690f77
+                submissionId: 8191c165-e9e4-4fd7-ac6d-5bfd04690f77
+        '400':
+          description: Bad Request. The payload failed schema or business-rules validation.
+        '401':
+          description: Unauthorized. Missing or invalid bearer token / APIM subscription key.
+        '403':
+          description: Forbidden. The caller is not authorised to submit enforcement results.
