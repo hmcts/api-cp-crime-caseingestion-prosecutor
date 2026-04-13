@@ -6102,25 +6102,20 @@ paths:
                 daysBeforeReleaseWarrant: 28
       responses:
         '200':
-          description: OK. CP has accepted and persisted the NOWS data items for this case.
+          description: OK. CP has accepted and persisted the NOWS data items. The correlation id is the single pairing key — caseURN is not echoed because a result may span multiple cases.
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  caseURN:
-                    description: Echo of the case URN from the callback payload for operator-friendly logging.
-                    type: string
                   correlationId:
                     description: Echo of the correlation ID so GoB can confirm the pairing.
                     type: string
                     format: uuid
                 required:
-                  - caseURN
                   - correlationId
                 additionalProperties: false
               example:
-                caseURN: TVL72301372
                 correlationId: 2f1e9a84-1b23-4c98-8a7b-9c0d1e2f3a4b
         '400':
           description: Bad Request. Payload failed schema or business-rules validation.
