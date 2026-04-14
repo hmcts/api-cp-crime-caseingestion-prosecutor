@@ -2,7 +2,7 @@ name: CI Build and Publish (RELEASE)
 
 on:
   release:
-    types: [published]
+    types: [ published ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -16,7 +16,7 @@ jobs:
       artefact_version: ${{ steps.artefact.outputs.release_version }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -29,7 +29,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   Update-Spec-Version:
-    needs: [Artefact-Version]
+    needs: [ Artefact-Version ]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -38,7 +38,7 @@ jobs:
       upload_artifact_name: ${{ steps.update_spec.outputs.upload_artifact_name }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Update OpenAPI Spec Version
         id: update_spec
@@ -66,23 +66,23 @@ jobs:
     needs: [ Artefact-Version, Push-Release-OpenAPI-Spec ]
     strategy:
       matrix:
-        java: [21]
+        java: [ 25 ]
 
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java }}
 
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
 
       - name: Download updated OpenAPI file
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: ${{ needs.Update-Spec-Version.outputs.upload_artifact_name }}
           path: ${{ env.FILE_PATH_OPENAPI }}
@@ -96,8 +96,7 @@ jobs:
           JAVA_VERSION: ${{ matrix.java }}
         run: |
           echo "Publishing artefact for ARTEFACT_VERSION=$ARTEFACT_VERSION using Java $JAVA_VERSION"
-          
-          gradle build -x test publish \
+          ./gradlew build -x test publish \
             -DAPI_SPEC_VERSION=$ARTEFACT_VERSION \
             -DGITHUB_REPOSITORY=${{ github.repository }} \
             -DGITHUB_ACTOR=${{ github.actor }} \
