@@ -1,0 +1,45 @@
+tasks.named('compileJava') {
+  dependsOn(tasks.openApiGenerate)
+}
+
+openApiGenerate {
+  inputSpec.set("src/main/resources/openapi/openapi-spec.yml")
+  outputDir = "${layout.buildDirectory.get().asFile.absolutePath}/generated"
+  apiPackage = "uk.gov.hmcts.cp.openapi.api"
+  modelPackage = "uk.gov.hmcts.cp.openapi.model"
+  generatorName = "spring"
+  typeMappings = ["OffsetDateTime": "Instant"]
+  importMappings = ["java.time.OffsetDateTime": "java.time.Instant"]
+  configOptions = [
+    interfaceOnly                       : "true",
+    useSpringBoot3                      : "true",
+    useTags                             : "true",   // use tag for api name
+    generatedConstructorWithRequiredArgs: "false",  // else conflicts with lombok AllArgsConstructor
+    openApiNullable                     : "false",  // else generates classes JsonNullable imports
+    additionalModelTypeAnnotations      : "@lombok.Builder;@lombok.AllArgsConstructor;@lombok.NoArgsConstructor",
+  ]
+}
+
+// The Spring generator adds @lombok.AllArgsConstructor to some models (allOf compositions)
+// but not others. Since additionalModelTypeAnnotations adds it to ALL models, some end up
+// with duplicates. This task strips the duplicate annotation lines after generation.
+tasks.named('openApiGenerate') {
+  doLast {
+    fileTree("${layout.buildDirectory.get().asFile.absolutePath}/generated/src/main/java").matching {
+      include '**/*.java'
+    }.each { file ->
+      def lines = file.readLines()
+      def seen = false
+      def filtered = lines.findAll { line ->
+        if (line.trim() == '@lombok.AllArgsConstructor') {
+          if (seen) return false
+          seen = true
+        }
+        return true
+      }
+      if (filtered.size() != lines.size()) {
+        file.text = filtered.join('\n') + '\n'
+      }
+    }
+  }
+}

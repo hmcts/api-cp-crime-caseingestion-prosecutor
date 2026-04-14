@@ -1,9 +1,5 @@
 .gradle
 /build/
-gradle/wrapper
-!gradle/wrapper/gradle-wrapper.properties
-gradlew
-gradlew.bat
 *.class
 bin
 
@@ -29,4 +25,5 @@ package-lock.json
 
 .DS_Store
 */.DS_Store
+
 /*report.html
