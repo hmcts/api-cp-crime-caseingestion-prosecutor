@@ -37,20 +37,6 @@ components:
       $ref: './schemas/CourtSession.yaml'
     hearingVenue:
       $ref: './schemas/HearingVenue.yaml'
-    enforcementResultPrompt:
-      $ref: './schemas/EnforcementResultPrompt.yaml'
-    enforcementResultEntry:
-      $ref: './schemas/EnforcementResultEntry.yaml'
-    enforcementResultPlea:
-      $ref: './schemas/EnforcementResultPlea.yaml'
-    enforcementResultVerdict:
-      $ref: './schemas/EnforcementResultVerdict.yaml'
-    enforcementResultOffence:
-      $ref: './schemas/EnforcementResultOffence.yaml'
-    enforcementResultCase:
-      $ref: './schemas/EnforcementResultCase.yaml'
-    enforcementResultDetails:
-      $ref: './schemas/EnforcementResultDetails.yaml'
     civilAddress:
       $ref: './schemas/CivilAddress.yaml'
     civilCommonAddress:
@@ -132,7 +118,5 @@ paths:
     $ref: './paths/submissions-submissionId.yaml'
   /results:
     $ref: './paths/results.yaml'
-  /enforcementprosecutions/results:
-    $ref: './paths/enforcementprosecutions-results.yaml'
   /civilprosecutions:
     $ref: './paths/civilprosecutions.yaml'
