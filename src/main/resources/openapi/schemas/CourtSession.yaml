@@ -1,0 +1,17 @@
+type: object
+properties:
+  courtRoom:
+    description: The court room where the hearing was proceeded
+    type: string
+  hearingStartTime:
+    description: The start time of the hearing
+    type: string
+  defendants:
+    type: array
+    minItems: 1
+    items:
+      $ref: './Defendant.yaml'
+required:
+  - courtRoom
+  - hearingStartTime
+  - defendants

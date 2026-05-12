@@ -1,0 +1,31 @@
+type: object
+x-class-extra-annotation: "@lombok.AllArgsConstructor"
+properties:
+  originatingCaseUrn:
+    description: URN of the case containing the offence
+    type: string
+  offenceCode:
+    description: The cjs code for the offence
+    type: string
+  orderIndex:
+    description: The offence index
+    type: integer
+    minimum: 0
+  offenceTitle:
+    description: The title taken from ref data
+    type: string
+  pleaValue:
+    description: The defendants plea against the offence
+    type: string
+  verdictCode:
+    description: The code for the verdict against the offence
+    type: string
+  offenceResults:
+    type: array
+    minItems: 1
+    items:
+      $ref: './Result.yaml'
+required:
+  - offenceCode
+  - orderIndex
+  - offenceTitle

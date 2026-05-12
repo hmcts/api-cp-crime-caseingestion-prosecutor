@@ -1,0 +1,16 @@
+type: object
+description: A free-form key/value prompt captured alongside a result (e.g. fine amount, collection order terms).
+properties:
+  id:
+    $ref: './Uuid.yaml'
+  label:
+    description: The prompt label as shown to the court user
+    type: string
+  value:
+    description: The prompt value captured against the label
+    type: string
+required:
+  - id
+  - label
+  - value
+additionalProperties: false

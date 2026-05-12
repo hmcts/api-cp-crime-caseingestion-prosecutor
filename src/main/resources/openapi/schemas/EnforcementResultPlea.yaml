@@ -1,0 +1,13 @@
+type: object
+description: The plea entered by the defendant against an offence.
+properties:
+  pleaDate:
+    description: Date on which the plea was entered
+    $ref: './DatePattern.yaml'
+  pleaValue:
+    description: The plea value, e.g. GUILTY, NOT_GUILTY.
+    type: string
+required:
+  - pleaDate
+  - pleaValue
+additionalProperties: false

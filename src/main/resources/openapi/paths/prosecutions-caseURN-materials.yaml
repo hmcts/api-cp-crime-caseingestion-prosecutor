@@ -1,0 +1,59 @@
+post:
+  summary: Submit materials operation
+  description: Upload a document and associate with an existing submitted case.
+  tags:
+    - Submitting Case Info
+  parameters:
+    - in: path
+      name: caseURN
+      description: The unique reference number from the prosecuting authority. Matches the URN used for case submission
+      schema:
+        type: string
+      required: true
+  requestBody:
+    description: Prosecution Case Details
+    required: true
+    content:
+      multipart/form-data:
+        schema:
+          type: object
+          properties:
+            material:
+              description: The uploaded material in binary format
+              type: string
+              format: binary
+            materialType:
+              description: Defines the type of material being uploaded
+              type: string
+            defendantId:
+              description: An optional reference to the identity of the defendant within this prosecution case
+              type: string
+            prosecutingAuthority:
+              description: The prosecutors CJS Organisation Code
+              type: string
+          required:
+            - material
+            - materialType
+            - prosecutingAuthority
+  responses:
+    '202':
+      description: Accepted
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusURL:
+                type: string
+              submissionId:
+                type: string
+                format: uuid
+            additionalProperties: false
+            required:
+              - statusURL
+              - submissionId
+          example:
+            statusURL: https://www.dummy.gov.uk/foo/bar/8191c165-e9e4-4fd7-ac6d-5bfd04690f77
+            submissionId: 8191c165-e9e4-4fd7-ac6d-5bfd04690f77
+    '400':
+      description: Bad Request

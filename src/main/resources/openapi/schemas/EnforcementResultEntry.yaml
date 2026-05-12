@@ -1,0 +1,30 @@
+type: object
+description: A single result imposed at defendant, case or offence level.
+x-class-extra-annotation: "@lombok.AllArgsConstructor"
+properties:
+  label:
+    description: The human-readable result label (e.g. 'Fine', 'Conditional discharge').
+    type: string
+  court:
+    description: The sentencing court
+    type: string
+  courtRoom:
+    description: The court room in which the result was imposed
+    type: string
+  lastSharedDate:
+    description: ISO-8601 timestamp at which this result was last shared with enforcement subscribers. Populated by CP on egress; omitted on ingress.
+    type: string
+    format: date-time
+  orderedDate:
+    description: The date on which the result was ordered by the court
+    $ref: './DatePattern.yaml'
+  prompts:
+    type: array
+    items:
+      $ref: './EnforcementResultPrompt.yaml'
+required:
+  - label
+  - court
+  - courtRoom
+  - prompts
+additionalProperties: false

@@ -1,0 +1,34 @@
+type: object
+description: An offence within a case, together with any offence-level results, plea and verdict.
+x-class-extra-annotation: "@lombok.AllArgsConstructor"
+properties:
+  id:
+    $ref: './Uuid.yaml'
+  startDate:
+    description: Offence start date
+    $ref: './DatePattern.yaml'
+  endDate:
+    description: Offence end date
+    $ref: './DatePattern.yaml'
+  offenceWording:
+    description: The full offence wording as charged
+    type: string
+  plea:
+    $ref: './EnforcementResultPlea.yaml'
+  offenceLevelResults:
+    type: array
+    items:
+      $ref: './EnforcementResultEntry.yaml'
+  convictionDate:
+    description: Date of conviction (if the offence resulted in a conviction)
+    $ref: './DatePattern.yaml'
+  verdict:
+    $ref: './EnforcementResultVerdict.yaml'
+required:
+  - id
+  - startDate
+  - endDate
+  - offenceWording
+  - offenceLevelResults
+  - plea
+additionalProperties: false

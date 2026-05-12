@@ -1,0 +1,138 @@
+openapi: 3.0.2
+servers:
+  - description: APIHub API Auto Mocking CPPI API
+    url: https://virtserver.swaggerhub.com/HMCTS-DTS/api-cp-crime-caseingestion-prosecutor/0.0.0
+info:
+  title: API Common Platform Prosecutor Interface
+  description: Crime API providing information on Common Platform Prosecutor Interface (CPPI)
+  version: 0.0.0
+  contact:
+    email: no-reply@hmcts.com
+  license:
+    name: MIT
+    url: 'https://opensource.org/licenses/MIT'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      description: Valid Bearer Token
+      type: http
+      scheme: bearer
+  schemas:
+    uuid:
+      $ref: './schemas/Uuid.yaml'
+    datePattern:
+      $ref: './schemas/DatePattern.yaml'
+    offence:
+      $ref: './schemas/Offence.yaml'
+    resultData:
+      $ref: './schemas/ResultData.yaml'
+    result:
+      $ref: './schemas/Result.yaml'
+    caseOrApplication:
+      $ref: './schemas/CaseOrApplication.yaml'
+    defendant:
+      $ref: './schemas/Defendant.yaml'
+    courtSession:
+      $ref: './schemas/CourtSession.yaml'
+    hearingVenue:
+      $ref: './schemas/HearingVenue.yaml'
+    enforcementResultPrompt:
+      $ref: './schemas/EnforcementResultPrompt.yaml'
+    enforcementResultEntry:
+      $ref: './schemas/EnforcementResultEntry.yaml'
+    enforcementResultPlea:
+      $ref: './schemas/EnforcementResultPlea.yaml'
+    enforcementResultVerdict:
+      $ref: './schemas/EnforcementResultVerdict.yaml'
+    enforcementResultOffence:
+      $ref: './schemas/EnforcementResultOffence.yaml'
+    enforcementResultCase:
+      $ref: './schemas/EnforcementResultCase.yaml'
+    enforcementResultDetails:
+      $ref: './schemas/EnforcementResultDetails.yaml'
+    civilAddress:
+      $ref: './schemas/CivilAddress.yaml'
+    civilCommonAddress:
+      $ref: './schemas/CivilCommonAddress.yaml'
+    civilCommonContactNumber:
+      $ref: './schemas/CivilCommonContactNumber.yaml'
+    civilContactDetails:
+      $ref: './schemas/CivilContactDetails.yaml'
+    civilCroNumber:
+      $ref: './schemas/CivilCroNumber.yaml'
+    civilCustodyStatus:
+      $ref: './schemas/CivilCustodyStatus.yaml'
+    civilDate:
+      $ref: './schemas/CivilDate.yaml'
+    civilDefendant:
+      $ref: './schemas/CivilDefendant.yaml'
+    civilDefendantDetails:
+      $ref: './schemas/CivilDefendantDetails.yaml'
+    civilEmail:
+      $ref: './schemas/CivilEmail.yaml'
+    civilGender:
+      $ref: './schemas/CivilGender.yaml'
+    civilHearingDetails:
+      $ref: './schemas/CivilHearingDetails.yaml'
+    civilIndividual:
+      $ref: './schemas/CivilIndividual.yaml'
+    civilLanguage:
+      $ref: './schemas/CivilLanguage.yaml'
+    civilMoney:
+      $ref: './schemas/CivilMoney.yaml'
+    civilNameDetails:
+      $ref: './schemas/CivilNameDetails.yaml'
+    civilOffence:
+      $ref: './schemas/CivilOffence.yaml'
+    civilOffenceDateCode:
+      $ref: './schemas/CivilOffenceDateCode.yaml'
+    civilOffenceDetails:
+      $ref: './schemas/CivilOffenceDetails.yaml'
+    civilOrganisation:
+      $ref: './schemas/CivilOrganisation.yaml'
+    civilOtherCases:
+      $ref: './schemas/CivilOtherCases.yaml'
+    civilParentGuardian:
+      $ref: './schemas/CivilParentGuardian.yaml'
+    civilParentGuardianIndividual:
+      $ref: './schemas/CivilParentGuardianIndividual.yaml'
+    civilParentGuardianNameDetails:
+      $ref: './schemas/CivilParentGuardianNameDetails.yaml'
+    civilParentGuardianOrganisation:
+      $ref: './schemas/CivilParentGuardianOrganisation.yaml'
+    civilPhone:
+      $ref: './schemas/CivilPhone.yaml'
+    civilPncId:
+      $ref: './schemas/CivilPncId.yaml'
+    civilProsecutionCase:
+      $ref: './schemas/CivilProsecutionCase.yaml'
+    civilSummonsProsecution:
+      $ref: './schemas/CivilSummonsProsecution.yaml'
+    civilUkGovPostCode:
+      $ref: './schemas/CivilUkGovPostCode.yaml'
+    civilUkGovPostCodeWithOptionalSpace:
+      $ref: './schemas/CivilUkGovPostCodeWithOptionalSpace.yaml'
+    civilUuid:
+      $ref: './schemas/CivilUuid.yaml'
+    civilVehicleMake:
+      $ref: './schemas/CivilVehicleMake.yaml'
+    civilVehicleRegistrationMark:
+      $ref: './schemas/CivilVehicleRegistrationMark.yaml'
+
+security:
+  - BearerAuth: []
+
+paths:
+  /prosecutions:
+    $ref: './paths/prosecutions.yaml'
+  /prosecutions/{caseURN}/materials:
+    $ref: './paths/prosecutions-caseURN-materials.yaml'
+  /submissions/{submissionId}:
+    $ref: './paths/submissions-submissionId.yaml'
+  /results:
+    $ref: './paths/results.yaml'
+  /enforcementprosecutions/results:
+    $ref: './paths/enforcementprosecutions-results.yaml'
+  /civilprosecutions:
+    $ref: './paths/civilprosecutions.yaml'

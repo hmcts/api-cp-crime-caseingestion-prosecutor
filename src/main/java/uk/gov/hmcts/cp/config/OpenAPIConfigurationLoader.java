@@ -16,7 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 public class OpenAPIConfigurationLoader {
 
     private static final Logger LOG = LoggerFactory.getLogger(OpenAPIConfigurationLoader.class);
-    private static final String CS_OPENAPI = "openapi/prosecutor.openapi.yml";
+    private static final String CS_OPENAPI = "openapi/openapi.yaml";
 
     public static OpenAPI loadOpenApiFromClasspath(final String path) {
         if (StringUtils.isBlank(path)) {
