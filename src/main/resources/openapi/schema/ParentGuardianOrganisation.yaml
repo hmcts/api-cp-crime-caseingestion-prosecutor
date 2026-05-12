@@ -1,0 +1,12 @@
+type: object
+properties:
+  organisationName:
+    type: string
+    description: Name of an organisation, e.g., Marks and Spencer.
+    maxLength: 255
+  companyTelephoneNumber:
+    type: string
+    pattern: ^[0-9+\ \-]{10,}$
+required:
+- organisationName
+additionalProperties: false

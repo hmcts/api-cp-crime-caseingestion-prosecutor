@@ -170,11 +170,16 @@ jar {
 }
 
 def inputSpecFile = fileTree("src/main/resources/openapi").matching {
-  include("*.openapi.yml")
+  include("prosecutor.openapi.yml")
+}.singleFile
+
+def inputCivilSpecFile = fileTree("src/main/resources/openapi").matching {
+  include("civilprosecutor.openapi.yml")
 }.singleFile
 
 tasks.named("openApiGenerate") {
   inputs.file(inputSpecFile)
+  inputs.file(inputCivilSpecFile)
 }
 
 openApiGenerate {

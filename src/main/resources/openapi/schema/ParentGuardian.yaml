@@ -1,0 +1,17 @@
+type: object
+description: Person details
+properties:
+  organisation:
+    $ref: ./ParentGuardianOrganisation.yaml
+  individual:
+    $ref: ./ParentGuardianIndividual.yaml
+  address:
+    $ref: ./Address.yaml
+oneOf:
+- required:
+  - individual
+  - address
+- required:
+  - organisation
+  - address
+additionalProperties: false

@@ -1,0 +1,20 @@
+type: object
+description: Person details
+properties:
+  nameDetails:
+    $ref: ./ParentGuardianNameDetails.yaml
+  contactDetails:
+    $ref: ./ContactDetails.yaml
+  dateOfBirth:
+    $ref: ./Date.yaml
+  gender:
+    $ref: ./Gender.yaml
+  observedEthnicity:
+    type: number
+  selfDefinedEthnicity:
+    type: string
+    description: Ethnicity Self Defined Code
+required:
+- nameDetails
+- gender
+additionalProperties: false

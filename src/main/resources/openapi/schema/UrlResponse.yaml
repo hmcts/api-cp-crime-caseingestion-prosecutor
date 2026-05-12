@@ -1,0 +1,10 @@
+type: object
+properties:
+  statusURL:
+    type: string
+  submissionId:
+    $ref: ./Uuid.yaml
+required:
+- statusURL
+- submissionId
+additionalProperties: false
