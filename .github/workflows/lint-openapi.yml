@@ -20,7 +20,7 @@ jobs:
       - name: Find OpenAPI file
         id: find_spec
         run: |
-          FILE=$(find ${FILE_PATH_OPENAPI} -name "*.openapi.yml" | head -n 1)
+          FILE=$(find ${FILE_PATH_OPENAPI} -maxdepth 1 -name "*openapi*.yml" | head -n 1)
           echo "openapi_file=$FILE" >> $GITHUB_OUTPUT
 
       - name: Assert disallowed URLs are not present
@@ -49,7 +49,11 @@ jobs:
       - name: Lint JSON schema example responses
         run: |
           shopt -s globstar nullglob
-          files=$(find src/main/resources/openapi/schema -name "*.json" ! -name "*.example.json")
+          if [ ! -d src/main/resources/openapi ]; then
+            echo "✅ No OpenAPI directory found."
+            exit 0
+          fi
+          files=$(find src/main/resources/openapi -name "*.json" ! -name "*.example.json" 2>/dev/null || true)
           if [ -z "$files" ]; then
             echo "✅ No example JSON files to lint."
           else

@@ -169,7 +169,7 @@ jar {
   }
 }
 
-def inputSpecFile = file("src/main/resources/openapi/openapi.yaml")
+def inputSpecFile = file("src/main/resources/openapi/openapi.yml")
 
 tasks.named("openApiGenerate") {
   inputs.file(inputSpecFile)

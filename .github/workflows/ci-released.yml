@@ -40,6 +40,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Bundle modular OpenAPI spec into a single self-contained file
+        run: |
+          npm install -g @redocly/cli@latest
+          redocly bundle ${FILE_PATH_OPENAPI}/openapi.yml -o /tmp/bundled.yml
+          rm -rf ${FILE_PATH_OPENAPI}/paths ${FILE_PATH_OPENAPI}/schemas
+          mv /tmp/bundled.yml ${FILE_PATH_OPENAPI}/openapi.yml
+
       - name: Update OpenAPI Spec Version
         id: update_spec
         uses: hmcts/update-openapi-version@main

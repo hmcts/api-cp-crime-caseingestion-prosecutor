@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh pr:*)",
+      "Bash(gh api:*)",
+      "Bash(git fetch:*)",
+      "Bash(git checkout:*)",
+      "Bash(./gradlew clean:*)",
+      "Read(//home/sachin/.claude/**)",
+      "Read(//home/sachin/.config/**)",
+      "WebFetch(domain:tools.hmcts.net)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('mcpServers', {}\\), indent=2\\)\\)\")",
+      "mcp__atlassian__confluence_get_page",
+      "Bash(awk *)",
+      "Bash(python3 *)",
+      "mcp__atlassian__confluence_update_page",
+      "Bash(mkdir -p /home/sachin/plans)",
+      "Read(//home/sachin/plans/**)",
+      "Bash(set -e)",
+      "Bash(mkdir -p /mnt/GoogleDrive/dev/claude/projects /mnt/GoogleDrive/dev/claude/plans)",
+      "Bash(cp -v /home/sachin/.claude/*.md /mnt/GoogleDrive/dev/claude/)",
+      "Bash(rsync -av --prune-empty-dirs --include='*/' --include='*.md' --exclude='*' /home/sachin/.claude/projects/ /mnt/GoogleDrive/dev/claude/projects/)",
+      "Bash(cp -rv /home/sachin/plans/* /mnt/GoogleDrive/dev/claude/plans/)",
+      "Bash(wait)",
+      "Bash(git -C /home/sachin/moj/api-cp-crime-caseingestion-prosecutor branch --show-current)",
+      "Bash(git -C /home/sachin/moj/api-cp-crime-caseingestion-prosecutor log --oneline -10)",
+      "Bash(grep -n '$ref:' /home/sachin/moj/api-cp-crime-caseingestion-prosecutor/src/main/resources/openapi/prosecutor.openapi.yml)",
+      "Read(//home/sachin/moj/**)",
+      "Bash(grep -nE '\\\\$ref: ['\\\\''\"]?#/components/schemas/' /home/sachin/moj/api-cp-crime-caseingestion-prosecutor/src/main/resources/openapi/prosecutor.openapi.yml)",
+      "Bash(grep -cE '\\\\$ref:' /home/sachin/moj/api-cp-crime-caseingestion-prosecutor/src/main/resources/openapi/prosecutor.openapi.yml)"
+    ]
+  }
+}
