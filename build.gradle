@@ -179,6 +179,9 @@ def inputCivilSpecFile = fileTree("src/main/resources/openapi").matching {
 
 tasks.named("openApiGenerate") {
   inputs.file(inputSpecFile)
+}
+
+tasks.named("openApiGenerate") {
   inputs.file(inputCivilSpecFile)
 }
 
