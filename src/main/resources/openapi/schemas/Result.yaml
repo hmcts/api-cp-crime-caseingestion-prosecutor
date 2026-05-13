@@ -1,0 +1,13 @@
+type: object
+x-class-extra-annotation: "@lombok.AllArgsConstructor"
+properties:
+  resultText:
+    description: The textual description of the result
+    type: string
+  cjsResultCode:
+    description: The cjs code for the result
+    type: string
+  resultData:
+    $ref: './ResultData.yaml'
+required:
+  - resultText

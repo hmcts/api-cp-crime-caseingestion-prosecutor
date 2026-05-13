@@ -1,0 +1,25 @@
+type: object
+description: Defendant Details of the case
+x-class-extra-annotation: "@lombok.AllArgsConstructor"
+properties:
+  defendantDetails:
+    $ref: ./CivilDefendantDetails.yaml
+  individual:
+    $ref: ./CivilIndividual.yaml
+  organisation:
+    $ref: ./CivilOrganisation.yaml
+  offences:
+    type: array
+    minItems: 1
+    items:
+      $ref: ./CivilOffence.yaml
+oneOf:
+- required:
+  - defendantDetails
+  - individual
+  - offences
+- required:
+  - defendantDetails
+  - organisation
+  - offences
+additionalProperties: false

@@ -1,0 +1,136 @@
+get:
+  summary: Get case / application results
+  description: Retrieve results related to case and applications
+  tags:
+    - Retrieve case and/or application results
+  parameters:
+    - in: query
+      name: startdate
+      description: Start date for results to be returned format YYYY-MM-DD
+      schema:
+        type: string
+      required: true
+    - in: query
+      name: enddate
+      description: 'End date (optional) for results to be returned format YYYY-MM-DD. If end date is note specified, only results pertaining to the start date will be returned '
+      schema:
+        type: string
+      required: false
+  responses:
+    '200':
+      description: OK. Response contains the current status of the submission
+      content:
+        application/vnd.hmcts.results.v1+json:
+          schema:
+            type: object
+            x-class-extra-annotation: "@lombok.AllArgsConstructor"
+            properties:
+              startDate:
+                $ref: '../schemas/DatePattern.yaml'
+              endDate:
+                $ref: '../schemas/DatePattern.yaml'
+              prosecutionAuthorityId:
+                $ref: '../schemas/Uuid.yaml'
+              prosecutionAuthorityCode:
+                description: The prosecuting authority reference data code
+                type: string
+              prosecutionAuthorityName:
+                type: string
+                description: The name of the prosecution authority from reference data.  Required for documentation purposes.  Required to be enriched when publishing hearing results
+              majorCreditorCode:
+                type: string
+              hearingVenues:
+                type: array
+                minItems: 1
+                items:
+                  $ref: '../schemas/HearingVenue.yaml'
+            required:
+              - startDate
+              - prosecutionAuthorityId
+              - prosecutionAuthorityCode
+          example:
+            hearingVenues:
+              - courtHouse: Lavender Hill Magistrates' Court
+                courtSessions:
+                  - courtRoom: N/A
+                    defendants:
+                      - address1: Flat 1, Armageddon House
+                        address2: 13 Old Road
+                        address3: Giggleswick
+                        address4: Merton
+                        address5: London
+                        dateOfBirth: '1998-09-18'
+                        firstName: Adult Adult Offender
+                        lastName: Smith
+                        name: Adult Adult Offender Smith
+                        postCode: SW11 5TQ
+                        prosecutionCasesOrApplications:
+                          - caseOrApplicationReference: TVL72301372
+                            offences:
+                              - offenceCode: CA03011
+                                offenceResults:
+                                  - cjsResultCode: '1015'
+                                    resultText: |-
+                                      Fine
+                                      Amount of fine 147
+                                  - cjsResultCode: '3012'
+                                    resultText: |-
+                                      Compensation
+                                      Amount of compensation 14
+                                offenceTitle: Possess a television set with intent to install / use without a licence
+                                orderIndex: 1
+                                originatingCaseUrn: TVL72301372
+                                pleaValue: GUILTY
+                              - offenceCode: CA03013
+                                offenceResults:
+                                  - cjsResultCode: '1015'
+                                    resultText: |-
+                                      Fine
+                                      Amount of fine 440
+                                  - cjsResultCode: '3012'
+                                    resultText: |-
+                                      Compensation
+                                      Amount of compensation 14
+                                offenceTitle: Obstruct person executing search warrant for TV receiver
+                                orderIndex: 2
+                                originatingCaseUrn: TVL72301372
+                                pleaValue: GUILTY
+                              - offenceCode: CA03011
+                                offenceResults:
+                                  - cjsResultCode: '1018'
+                                    resultText: "Conditional discharge\nPeriod\_of conditional discharge 12"
+                                  - cjsResultCode: '3012'
+                                    resultText: |-
+                                      Compensation
+                                      Amount of compensation 14
+                                offenceTitle: Possess a television set with intent to install / use without a licence
+                                orderIndex: 3
+                                originatingCaseUrn: TVL72301372
+                                pleaValue: GUILTY
+                        results:
+                          - cjsResultCode: '3011'
+                            resultText: |-
+                              Costs
+                              Amount of costs 11
+                          - resultText: |-
+                              Collection order
+                              Collection order type Make payments as ordered
+                              Reason for not making an attachment of earnings order or deduction from benefit application No information from defendant
+                          - cjsResultCode: '3117'
+                            resultText: |-
+                              Surcharge
+                              Amount of surcharge 59
+                          - resultText: |-
+                              Payment terms - Instalments only
+                              Instalment amount 25
+                              Instalment start date 2021-07-01
+                              Payment frequency fortnightly
+                        title: Mr
+                    hearingStartTime: '2021-04-27T10:02:00Z'
+                ljaName: Lavender Hill Magistrates' Court
+            prosecutionAuthorityCode: TVL
+            prosecutionAuthorityId: 6b7b9adc-ccee-4b13-b2c7-499c28e98962
+            prosecutionAuthorityName: TV Licensing
+            startDate: '2021-04-27'
+    '400':
+      description: Bad Request

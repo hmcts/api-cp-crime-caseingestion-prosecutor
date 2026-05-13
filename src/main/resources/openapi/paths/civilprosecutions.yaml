@@ -1,0 +1,39 @@
+post:
+  summary: Submit a civil prosecution
+  description: >-
+    Submit a new civil prosecution (others or summons) to the staging
+    prosecutors civil service. Returns 202 with a submission ID and
+    status URL that can be polled for completion.
+  tags:
+    - Civil Prosecutions
+  requestBody:
+    required: true
+    content:
+      application/vnd.stagingprosecutorscivil.others.v1+json:
+        schema:
+          $ref: '../schemas/CivilOtherCases.yaml'
+      application/vnd.stagingprosecutorscivil.summons.v1+json:
+        schema:
+          $ref: '../schemas/CivilSummonsProsecution.yaml'
+  responses:
+    '202':
+      description: Civil prosecution accepted for processing
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusURL:
+                type: string
+              submissionId:
+                type: string
+                format: uuid
+            additionalProperties: false
+            required:
+              - statusURL
+              - submissionId
+          example:
+            statusURL: https://www.dummy.gov.uk/foo/bar/8191c165-e9e4-4fd7-ac6d-5bfd04690f77
+            submissionId: 8191c165-e9e4-4fd7-ac6d-5bfd04690f77
+    '500':
+      description: Internal Server Error

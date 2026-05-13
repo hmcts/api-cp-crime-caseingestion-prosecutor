@@ -1,0 +1,21 @@
+type: object
+description: Person details
+x-class-extra-annotation: "@lombok.AllArgsConstructor"
+properties:
+  nameDetails:
+    $ref: ./CivilParentGuardianNameDetails.yaml
+  contactDetails:
+    $ref: ./CivilContactDetails.yaml
+  dateOfBirth:
+    $ref: ./CivilDate.yaml
+  gender:
+    $ref: ./CivilGender.yaml
+  observedEthnicity:
+    type: number
+  selfDefinedEthnicity:
+    type: string
+    description: Ethnicity Self Defined Code
+required:
+- nameDetails
+- gender
+additionalProperties: false

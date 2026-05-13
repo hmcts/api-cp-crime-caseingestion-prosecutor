@@ -1,0 +1,25 @@
+type: object
+x-class-extra-annotation: "@lombok.AllArgsConstructor"
+properties:
+  amount:
+    description: ''
+    type: string
+  nextHearingDate:
+    type: string
+    format: date-time
+  nextCourtLocation:
+    type: string
+  durationValue:
+    type: string
+  durationUnit:
+    type: string
+  durationStartDate:
+    type: string
+    format: date-time
+  durationEndDate:
+    type: string
+    format: date-time
+  secondaryDurationValue:
+    type: string
+  secondaryDurationUnit:
+    type: string

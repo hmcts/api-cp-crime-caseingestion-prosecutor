@@ -1,0 +1,28 @@
+type: object
+description: Contact details
+x-class-extra-annotation: "@lombok.AllArgsConstructor"
+properties:
+  home:
+    allOf:
+    - $ref: ./CivilPhone.yaml
+    description: The home telephone number
+  work:
+    type: string
+    description: The work telephone number is free format to allow the specification
+      of extensions, etc
+  mobile:
+    allOf:
+    - $ref: ./CivilPhone.yaml
+    description: The mobile number
+  primaryEmail:
+    allOf:
+    - $ref: ./CivilEmail.yaml
+    description: The primary email address
+  secondaryEmail:
+    allOf:
+    - $ref: ./CivilEmail.yaml
+    description: The secondary email address
+  fax:
+    type: string
+    description: The fax number
+additionalProperties: false
