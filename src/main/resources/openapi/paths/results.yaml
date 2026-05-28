@@ -204,12 +204,14 @@ get:
         application/vnd.hmcts.results.v1+json:
           schema:
             type: object
+            x-class-extra-annotation: "@lombok.AllArgsConstructor"
             properties:
               errors:
                 type: array
                 description: Errors associated with the request
                 items:
                   type: object
+                  x-class-extra-annotation: "@lombok.AllArgsConstructor"
                   properties:
                     code:
                       type: string
