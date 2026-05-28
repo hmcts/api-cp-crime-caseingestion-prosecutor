@@ -211,7 +211,6 @@ get:
                 description: Errors associated with the request
                 items:
                   type: object
-                  x-class-extra-annotation: "@lombok.AllArgsConstructor"
                   properties:
                     code:
                       type: string
