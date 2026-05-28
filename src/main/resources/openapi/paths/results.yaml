@@ -173,6 +173,31 @@ get:
             prosecutionAuthorityId: 6b7b9adc-ccee-4b13-b2c7-499c28e98962
             prosecutionAuthorityName: TV Licensing
             startDate: '2021-04-27'
+            warnings:
+              - code: DEFENDANT_UNDER_18_YEARS_AT_CHARGE_DATE
+                values:
+                  - key: dateOfBirth
+                    value: '2008-03-15'
+                  - key: chargeDate
+                    value: '2024-11-01'
+              - code: OFFENCE_OUT_OF_TIME
+                values:
+                  - key: daysOverdue
+                    value: '5'
+              - code: OFFENCE_NOT_IN_EFFECT_ON_OFFENCE_COMMITTED_DATE
+                values:
+                  - key: offenceCode
+                    value: CA03011
+                  - key: offenceCommittedDate
+                    value: '2019-01-01'
+                  - key: offenceStartDate
+                    value: '2020-06-01'
+                  - key: offenceEndDate
+                    value: '2023-12-31'
+              - code: IMPRISONABLE_OFFENCE
+                values:
+                  - key: offenceCode
+                    value: CA03013
     '400':
       description: Bad Request
       content:
