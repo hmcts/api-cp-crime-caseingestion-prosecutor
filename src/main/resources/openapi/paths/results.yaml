@@ -44,6 +44,47 @@ get:
                 minItems: 1
                 items:
                   $ref: '../schemas/HearingVenue.yaml'
+              warnings:
+                type: array
+                description: Warnings associated with the results. A successful response may still contain warnings.
+                items:
+                  type: object
+                  properties:
+                    code:
+                      type: string
+                      minLength: 1
+                      description: |
+                        Warning code indicating the nature of the warning:
+                        - DEFENDANT_UNDER_18_YEARS_AT_CHARGE_DATE: Returned when the defendant was under 18 at the time of charge. Attributes: dateOfBirth, chargeDate
+                        - OFFENCE_OUT_OF_TIME: Returned when the difference between the charge date and the offence committed date exceeds the prosecution time limit. Attributes: daysOverdue
+                        - OFFENCE_NOT_IN_EFFECT_ON_OFFENCE_COMMITTED_DATE: Returned when the offence was not in effect at the time the offence was committed. Attributes: offenceCode, offenceCommittedDate, offenceStartDate, offenceEndDate
+                        - IMPRISONABLE_OFFENCE: Returned when the offence is imprisonable. Attributes: offenceCode
+                      enum:
+                        - DEFENDANT_UNDER_18_YEARS_AT_CHARGE_DATE
+                        - OFFENCE_OUT_OF_TIME
+                        - OFFENCE_NOT_IN_EFFECT_ON_OFFENCE_COMMITTED_DATE
+                        - IMPRISONABLE_OFFENCE
+                    values:
+                      type: array
+                      description: Key-value pairs providing additional context for the warning
+                      items:
+                        type: object
+                        x-class-extra-annotation: "@lombok.AllArgsConstructor"
+                        properties:
+                          id:
+                            type: string
+                          key:
+                            type: string
+                            minLength: 1
+                          value:
+                            type: string
+                        required:
+                          - key
+                          - value
+                  required:
+                    - code
+                    - values
+                  additionalProperties: false
             required:
               - startDate
               - prosecutionAuthorityId
@@ -132,5 +173,149 @@ get:
             prosecutionAuthorityId: 6b7b9adc-ccee-4b13-b2c7-499c28e98962
             prosecutionAuthorityName: TV Licensing
             startDate: '2021-04-27'
+            warnings:
+              - code: DEFENDANT_UNDER_18_YEARS_AT_CHARGE_DATE
+                values:
+                  - key: dateOfBirth
+                    value: '2008-03-15'
+                  - key: chargeDate
+                    value: '2024-11-01'
+              - code: OFFENCE_OUT_OF_TIME
+                values:
+                  - key: daysOverdue
+                    value: '5'
+              - code: OFFENCE_NOT_IN_EFFECT_ON_OFFENCE_COMMITTED_DATE
+                values:
+                  - key: offenceCode
+                    value: CA03011
+                  - key: offenceCommittedDate
+                    value: '2019-01-01'
+                  - key: offenceStartDate
+                    value: '2020-06-01'
+                  - key: offenceEndDate
+                    value: '2023-12-31'
+              - code: IMPRISONABLE_OFFENCE
+                values:
+                  - key: offenceCode
+                    value: CA03013
     '400':
       description: Bad Request
+      content:
+        application/vnd.hmcts.results.v1+json:
+          schema:
+            type: object
+            x-class-extra-annotation: "@lombok.AllArgsConstructor"
+            properties:
+              errors:
+                type: array
+                description: Errors associated with the request
+                items:
+                  type: object
+                  properties:
+                    code:
+                      type: string
+                      minLength: 1
+                      description: |
+                        Error code indicating why the request was rejected:
+                        - DEFENDANT_DOB_IN_FUTURE: Returned when the defendant's date of birth is in the future
+                        - DUPLICATED_PROSECUTION: Returned when attempting to create a prosecution that already exists on CPP
+                        - OFFENCE_CODE_IS_INVALID: Returned when the offence code is not recognised as a valid CJS offence code
+                        - OFFENCE_REQUIRES_A_LOCATION: Returned when an offence location is not provided when the CJS Offence Code full offence wording includes a location element
+                        - DEFENDANT_NATIONALITY_INVALID: Returned if an invalid value is received for Nationality
+                        - DEFENDANT_ADDITIONAL_NATIONALITY_INVALID: Returned if an invalid value is received for Additional Nationality
+                        - INVALID_FILE_TYPE: Returned if the file is not a pdf or word document
+                        - INVALID_DOCUMENT_TYPE: Returned if the document type is not a valid document type or not SJPN or CITN (for SJP cases)
+                        - CASE_REFERRED_TO_OPEN_COURT: Returned when attempting to submit a document for a case that has been referred to open court
+                        - MATERIAL_EXPIRED: Returned when the matching case for the submitted document cannot be found after 10 days from the date of receipt of the request
+                        - COURT_HEARING_LOCATION_OUCODE_INVALID: Returned when the supplied OUCODE for the court hearing location is not recognised
+                        - DATE_OF_HEARING_EARLIER_THAN_OFFENCE_COMMITTED_DATE: Returned when the date of hearing is earlier than the date the offence was committed
+                        - STATEMENT_OF_FACTS_REQUIRED: Returned when the statement of facts is not provided when it is required
+                        - PROSECUTOR_OUCODE_NOT_RECOGNISED: Returned when an OUCODE that is not recognised by CPP is received in the case submission
+                        - BAIL_CONDITIONS_REQUIRED: Returned when custody status is "B" and bail conditions not provided
+                        - DEFENDANT_ID_REQUIRED: Returned when a defendant is not provided when it is required
+                        - ARREST_DATE_IN_FUTURE: Returned when the arrest date is in the future
+                        - CHARGE_DATE_IN_FUTURE: Returned when the charge date is in the future
+                        - DATE_OF_HEARING_IN_THE_PAST: Returned when the date of hearing is in the past
+                        - DEFENDANT_CUSTODY_STATUS_INVALID: Returned when the custody status is not recognised
+                        - SUMMONS_CODE_INVALID: Returned when the summons code is not recognised
+                        - DEFENDANT_PARENT_GUARDIAN_DATE_OF_BIRTH_IN_FUTURE: Returned when the date of birth of the parent/guardian is in the future
+                        - CASE_MARKER_IS_INVALID: Returned when the case marker is not recognised
+                        - DEFENDANT_SELF_DEFINED_ETHNICITY_INVALID: Returned when the defendant's self defined ethnicity is not recognised
+                        - DEFENDANT_OBSERVED_ETHNICITY_INVALID: Returned when the defendant's observed ethnicity is not recognised
+                        - DEFENDANT_PARENT_GUARDIAN_SELF_DEFINED_ETHNICITY_INVALID: Returned when the defendant's parent/guardian self defined ethnicity is not recognised
+                        - DEFENDANT_PARENT_GUARDIAN_OBSERVED_ETHNICITY_INVALID: Returned when the defendant's parent/guardian observed ethnicity is not recognised
+                        - ALCOHOL_DRUG_LEVEL_METHOD_MISSING: Returned when the alcohol or drug level method has not been provided and the offence type is of driving with drugs or alcohol in excess of specified limit
+                        - ALCOHOL_DRUG_LEVEL_AMOUNT_MISSING: Returned when the alcohol or drug level amount has not been provided and the offence type is of driving with drugs or alcohol in excess of specified limit
+                        - ALCOHOL_DRUG_LEVEL_METHOD_INVALID: Returned when the alcohol or drug level method is not recognised
+                        - STATEMENT_OF_FACTS_WELSH_REQUIRED: Returned when the document language is Welsh and Summons type is M and statement of facts Welsh is not provided
+                        - DEFENDANT_ID_INVALID: Returned when the supplied defendant id in Submit Material API does not match a defendant id on the case
+                        - DUPLICATE_DEFENDANT: Returned when a case has more than one instance of the same defendant based on the prosecutor's defendant ID
+                        - BACK_DUTY_AMOUNT_MISSING: Returned when the back duty field has not been provided and offence type requires back duty information
+                        - BACK_DUTY_DATE_RANGE_INVALID: Returned when the back duty from date is earlier than the back duty to date or only 1 date was provided
+                        - PROSECUTOR_NOT_RECOGNISED_AS_AN_AUTHORISED_SJP_PROSECUTOR: Returned when a case submission is received from a prosecutor not recognised by CPP as an authorised SJP prosecutor
+                        - CASE_HAS_MORE_THAN_ONE_DEFENDANT: Returned when an SJP case has more than one defendant
+                      enum:
+                        - DEFENDANT_DOB_IN_FUTURE
+                        - DUPLICATED_PROSECUTION
+                        - OFFENCE_CODE_IS_INVALID
+                        - OFFENCE_REQUIRES_A_LOCATION
+                        - DEFENDANT_NATIONALITY_INVALID
+                        - DEFENDANT_ADDITIONAL_NATIONALITY_INVALID
+                        - INVALID_FILE_TYPE
+                        - INVALID_DOCUMENT_TYPE
+                        - CASE_REFERRED_TO_OPEN_COURT
+                        - MATERIAL_EXPIRED
+                        - COURT_HEARING_LOCATION_OUCODE_INVALID
+                        - DATE_OF_HEARING_EARLIER_THAN_OFFENCE_COMMITTED_DATE
+                        - STATEMENT_OF_FACTS_REQUIRED
+                        - PROSECUTOR_OUCODE_NOT_RECOGNISED
+                        - BAIL_CONDITIONS_REQUIRED
+                        - DEFENDANT_ID_REQUIRED
+                        - ARREST_DATE_IN_FUTURE
+                        - CHARGE_DATE_IN_FUTURE
+                        - DATE_OF_HEARING_IN_THE_PAST
+                        - DEFENDANT_CUSTODY_STATUS_INVALID
+                        - SUMMONS_CODE_INVALID
+                        - DEFENDANT_PARENT_GUARDIAN_DATE_OF_BIRTH_IN_FUTURE
+                        - CASE_MARKER_IS_INVALID
+                        - DEFENDANT_SELF_DEFINED_ETHNICITY_INVALID
+                        - DEFENDANT_OBSERVED_ETHNICITY_INVALID
+                        - DEFENDANT_PARENT_GUARDIAN_SELF_DEFINED_ETHNICITY_INVALID
+                        - DEFENDANT_PARENT_GUARDIAN_OBSERVED_ETHNICITY_INVALID
+                        - ALCOHOL_DRUG_LEVEL_METHOD_MISSING
+                        - ALCOHOL_DRUG_LEVEL_AMOUNT_MISSING
+                        - ALCOHOL_DRUG_LEVEL_METHOD_INVALID
+                        - STATEMENT_OF_FACTS_WELSH_REQUIRED
+                        - DEFENDANT_ID_INVALID
+                        - DUPLICATE_DEFENDANT
+                        - BACK_DUTY_AMOUNT_MISSING
+                        - BACK_DUTY_DATE_RANGE_INVALID
+                        - PROSECUTOR_NOT_RECOGNISED_AS_AN_AUTHORISED_SJP_PROSECUTOR
+                        - CASE_HAS_MORE_THAN_ONE_DEFENDANT
+                    values:
+                      type: array
+                      description: Key-value pairs providing additional context for the error
+                      items:
+                        type: object
+                        x-class-extra-annotation: "@lombok.AllArgsConstructor"
+                        properties:
+                          id:
+                            type: string
+                          key:
+                            type: string
+                            minLength: 1
+                          value:
+                            type: string
+                        required:
+                          - key
+                          - value
+                  required:
+                    - code
+                    - values
+                  additionalProperties: false
+          example:
+            errors:
+              - code: DEFENDANT_DOB_IN_FUTURE
+                values:
+                  - key: dateOfBirth
+                    value: '2030-01-01'
