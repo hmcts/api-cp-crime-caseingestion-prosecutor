@@ -56,6 +56,11 @@ jobs:
           rm -rf ${FILE_PATH_OPENAPI}/paths ${FILE_PATH_OPENAPI}/schemas
           mv /tmp/bundled.yml ${FILE_PATH_OPENAPI}/openapi.yml
 
+      - name: Update servers URL to match API version
+        run: |
+          API_VERSION="${{ needs.Artefact-Version.outputs.artefact_version }}"
+          sed -i "s|virtserver.swaggerhub.com/HMCTS-DTS/api-cp-crime-caseingestion-prosecutor/[^[:space:]\"']*|virtserver.swaggerhub.com/HMCTS-DTS/api-cp-crime-caseingestion-prosecutor/${API_VERSION}|" ${FILE_PATH_OPENAPI}/openapi.yml
+
       - name: Update OpenAPI Spec Version
         id: update_spec
         uses: hmcts/update-openapi-version@main
