@@ -1,7 +1,11 @@
 openapi: 3.0.2
 servers:
-  - description: APIHub API Auto Mocking CPPI API
-    url: https://virtserver.swaggerhub.com/HMCTS-DTS/api-cp-crime-caseingestion-prosecutor/0.0.0
+  - description: API Common Platform Prosecutor Interface
+    url: https://api-cp-crime-caseingestion-prosecutor.net/{version}
+    variables:
+      version:
+        default: 0.0.0
+        description: API version; matches the spec info.version
 info:
   title: API Common Platform Prosecutor Interface
   description: Crime API providing information on Common Platform Prosecutor Interface (CPPI)
