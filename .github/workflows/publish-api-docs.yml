@@ -23,10 +23,6 @@ env:
   FILE_PATH_OPENAPI: "src/main/resources/openapi"
 
 jobs:
-  docs:
-    uses: hmcts/amp-catalog/.github/workflows/publish-swagger-ui.yml@v1
-    with:
-      openapi_path: src/main/resources/openapi/openapi.yml
   deploy:
     runs-on: ubuntu-latest
     environment:

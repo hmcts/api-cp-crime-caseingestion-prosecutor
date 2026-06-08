@@ -63,7 +63,7 @@ jobs:
   Publish:
     name: Publish - Java ${{ matrix.java }}
     runs-on: ubuntu-latest
-    needs: [ Artefact-Version, Push-Release-OpenAPI-Spec ]
+    needs: [ Artefact-Version, Update-Spec-Version ]
     strategy:
       matrix:
         java: [21]
