@@ -1,11 +1,7 @@
 openapi: 3.0.2
 servers:
   - description: API Common Platform Prosecutor Interface
-    url: https://api-cp-crime-caseingestion-prosecutor.net/{version}
-    variables:
-      version:
-        default: 4.0.0
-        description: API version; matches the spec info.version
+    url: https://hmcts.github.io/api-cp-crime-caseingestion-prosecutor/
 info:
   title: API Common Platform Prosecutor Interface
   description: Crime API providing information on Common Platform Prosecutor Interface (CPPI)
